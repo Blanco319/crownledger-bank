@@ -3,15 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pay & Transfer - CrownLedger Bank</title>
+    <title>Transfer Money - CrownLedger Bank</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .transfer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .transfer-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+            display: block;
+        }
+        
+        .transfer-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+            border-color: var(--blue);
+        }
+        
+        .transfer-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 16px;
+        }
+        
+        .transfer-icon.internal {
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+        
+        .transfer-icon.external {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+        
+        .transfer-icon.wire {
+            background: var(--gold-light);
+            color: var(--gold);
+        }
+        
+        .transfer-icon.chime {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        
+        .transfer-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .transfer-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .transfer-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .account-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .account-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--white);
+        }
+        
+        .account-option:hover {
+            border-color: var(--blue);
+        }
+        
+        .account-option.selected {
+            border-color: var(--blue);
+            background: var(--blue-light);
+        }
+        
+        .account-option-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .account-option-icon.checking {
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+        
+        .account-option-icon.savings {
+            background: var(--gold-light);
+            color: var(--gold);
+        }
+        
+        .account-option-details {
+            flex: 1;
+        }
+        
+        .account-option-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        .account-option-balance {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        
+        .radio-indicator {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .account-option.selected .radio-indicator {
+            border-color: var(--blue);
+        }
+        
+        .account-option.selected .radio-indicator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: var(--blue);
+            border-radius: 50%;
+        }
+        
+        .amount-input-wrapper {
+            position: relative;
+        }
+        
+        .currency-symbol {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .amount-input {
+            width: 100%;
+            padding: 16px 16px 16px 40px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 24px;
+            font-weight: 700;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        
+        .amount-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 4px rgba(0,102,178,0.1);
+        }
+        
+        .transfer-summary {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 24px 0;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .summary-row.total {
+            border-top: 2px solid var(--border);
+            margin-top: 8px;
+            padding-top: 12px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .transfer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
         <nav class="top-nav">
-            <div class="nav-left">
+            <div class="nav-left" style="display:flex;align-items:center;width:100%;max-width:1200px;margin:0 auto;padding:0 24px;">
                 <div class="logo-small">CrownLedger<span class="logo-trademark">®</span></div>
                 <div class="nav-links">
                     <a href="dashboard.html">Accounts</a>
@@ -19,67 +243,148 @@
                     <a href="transactions.html">Activity</a>
                     <a href="settings.html">Settings</a>
                 </div>
-            </div>
-            <div class="nav-right">
-                <span class="welcome-text">Welcome, <span id="userName">Kimberly</span></span>
-                <button class="btn-outline-small" onclick="handleLogout()">Sign Out</button>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div style="margin-left:auto;display:flex;align-items:center;gap:16px;">
+                    <span class="welcome-text">Welcome, <span id="userName">Kimberly</span></span>
+                    <button class="btn-outline-small" onclick="handleLogout()">Sign Out</button>
+                </div>
             </div>
         </nav>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="dashboard.html">Accounts</a>
+            <a href="transfer.html" class="active">Pay & Transfer</a>
+            <a href="transactions.html">Activity</a>
+            <a href="settings.html">Settings</a>
+            <a href="#" onclick="handleLogout()">Sign Out</a>
+        </div>
 
         <main class="main-content">
-            <div class="page-header">
-                <h1>Pay & Transfer</h1>
-                <p class="page-subtitle">Send money, make transfers, and manage payments</p>
+            <div class="page-header" style="text-align:center;">
+                <h1>Transfer Money</h1>
+                <p class="subtitle">Choose how you'd like to transfer funds</p>
             </div>
 
             <div class="transfer-grid">
-                <!-- Send Money Card -->
-                <div class="transfer-card" onclick="checkActivation()">
-                    <div class="transfer-icon">
-                        <i class="fas fa-paper-plane"></i>
-                    </div>
-                    <h3>Send Money</h3>
-                    <p>Send money to friends, family, or businesses quickly and securely.</p>
-                    <span class="transfer-arrow"><i class="fas fa-chevron-right"></i></span>
-                </div>
-
-                <!-- Withdraw Card -->
-                <div class="transfer-card" onclick="checkActivation()">
-                    <div class="transfer-icon withdraw">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
-                    <h3>Withdraw Funds</h3>
-                    <p>Withdraw money to your external accounts or digital wallets.</p>
-                    <span class="transfer-arrow"><i class="fas fa-chevron-right"></i></span>
-                </div>
-
-                <!-- Transfer Between Accounts -->
-                <div class="transfer-card" onclick="showMessage('Internal transfers available soon')">
+                <a href="#" class="transfer-card" onclick="showInternalTransfer(); return false;">
                     <div class="transfer-icon internal">
                         <i class="fas fa-exchange-alt"></i>
                     </div>
                     <h3>Between Accounts</h3>
-                    <p>Move money between your CrownLedger accounts instantly.</p>
-                    <span class="transfer-arrow"><i class="fas fa-chevron-right"></i></span>
-                </div>
-
-                <!-- Wire Transfer -->
-                <div class="transfer-card" onclick="checkActivation()">
+                    <p>Transfer between your CrownLedger checking and savings accounts instantly.</p>
+                </a>
+                
+                <a href="chime-payment.html" class="transfer-card">
+                    <div class="transfer-icon chime">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3>Chime Transfer</h3>
+                    <p>Send money to your Chime account. Fast and secure.</p>
+                </a>
+                
+                <a href="#" class="transfer-card" onclick="showMessage('External transfers coming soon'); return false;">
+                    <div class="transfer-icon external">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3>External Account</h3>
+                    <p>Transfer to or from another bank account. 1-3 business days.</p>
+                </a>
+                
+                <a href="#" class="transfer-card" onclick="showMessage('Wire transfers coming soon'); return false;">
                     <div class="transfer-icon wire">
                         <i class="fas fa-globe"></i>
                     </div>
                     <h3>Wire Transfer</h3>
-                    <p>Send domestic or international wire transfers.</p>
-                    <span class="transfer-arrow"><i class="fas fa-chevron-right"></i></span>
-                </div>
+                    <p>Same-day domestic or international wire transfers.</p>
+                </a>
             </div>
 
-            <!-- Account Status Banner -->
-            <div class="status-banner" id="statusBanner">
-                <i class="fas fa-info-circle"></i>
-                <div class="status-content">
-                    <strong>Account Activation Required</strong>
-                    <p>Your account requires a one-time activation fee of $500.00 before you can send money or make withdrawals. <a href="activation-fee.html">Activate now</a></p>
+            <div id="internalTransferForm" style="display:none;max-width:600px;margin:32px auto 0;">
+                <div class="card">
+                    <h2 style="margin-bottom:24px;">Internal Transfer</h2>
+                    <form onsubmit="return handleInternalTransfer(event)">
+                        <div class="form-group">
+                            <label>From</label>
+                            <div class="account-selector">
+                                <div class="account-option selected" onclick="selectFrom(this, 'checking')">
+                                    <div class="account-option-icon checking"><i class="fas fa-wallet"></i></div>
+                                    <div class="account-option-details">
+                                        <div class="account-option-name">CrownLedger Checking</div>
+                                        <div class="account-option-balance" id="fromCheckingBalance">$11,700.00</div>
+                                    </div>
+                                    <div class="radio-indicator"></div>
+                                </div>
+                                <div class="account-option" onclick="selectFrom(this, 'savings')">
+                                    <div class="account-option-icon savings"><i class="fas fa-piggy-bank"></i></div>
+                                    <div class="account-option-details">
+                                        <div class="account-option-name">CrownLedger Savings</div>
+                                        <div class="account-option-balance" id="fromSavingsBalance">$2,520.00</div>
+                                    </div>
+                                    <div class="radio-indicator"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>To</label>
+                            <div class="account-selector">
+                                <div class="account-option" onclick="selectTo(this, 'savings')">
+                                    <div class="account-option-icon savings"><i class="fas fa-piggy-bank"></i></div>
+                                    <div class="account-option-details">
+                                        <div class="account-option-name">CrownLedger Savings</div>
+                                        <div class="account-option-balance" id="toSavingsBalance">$2,520.00</div>
+                                    </div>
+                                    <div class="radio-indicator"></div>
+                                </div>
+                                <div class="account-option selected" onclick="selectTo(this, 'checking')">
+                                    <div class="account-option-icon checking"><i class="fas fa-wallet"></i></div>
+                                    <div class="account-option-details">
+                                        <div class="account-option-name">CrownLedger Checking</div>
+                                        <div class="account-option-balance" id="toCheckingBalance">$11,700.00</div>
+                                    </div>
+                                    <div class="radio-indicator"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transferAmount">Amount</label>
+                            <div class="amount-input-wrapper">
+                                <span class="currency-symbol">$</span>
+                                <input type="number" id="transferAmount" class="amount-input" placeholder="0.00" step="0.01" min="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transferMemo">Memo (Optional)</label>
+                            <input type="text" id="transferMemo" class="form-input" placeholder="What's this for?">
+                        </div>
+                        
+                        <div class="transfer-summary">
+                            <div class="summary-row">
+                                <span>From</span>
+                                <span id="summaryFrom">CrownLedger Checking</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>To</span>
+                                <span id="summaryTo">CrownLedger Savings</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Amount</span>
+                                <span id="summaryAmount">$0.00</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total</span>
+                                <span id="summaryTotal">$0.00</span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary btn-full">
+                            <i class="fas fa-check-circle"></i> Confirm Transfer
+                        </button>
+                    </form>
                 </div>
             </div>
         </main>
@@ -105,6 +410,87 @@
     </div>
 
     <script src="shared.js"></script>
-    <script>initTransfer();</script>
+    <script>
+        var fromAccount = 'checking';
+        var toAccount = 'savings';
+        
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+        
+        function showMessage(msg) {
+            document.getElementById('modalMessage').textContent = msg;
+            document.getElementById('messageModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('messageModal').style.display = 'none';
+        }
+        
+        function showInternalTransfer() {
+            document.getElementById('internalTransferForm').style.display = 'block';
+            document.getElementById('internalTransferForm').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function selectFrom(el, account) {
+            fromAccount = account;
+            document.querySelectorAll('#internalTransferForm .account-selector:first-child .account-option').forEach(function(opt) {
+                opt.classList.remove('selected');
+            });
+            el.classList.add('selected');
+            updateSummary();
+        }
+        
+        function selectTo(el, account) {
+            toAccount = account;
+            document.querySelectorAll('#internalTransferForm .account-selector:last-child .account-option').forEach(function(opt) {
+                opt.classList.remove('selected');
+            });
+            el.classList.add('selected');
+            updateSummary();
+        }
+        
+        function updateSummary() {
+            document.getElementById('summaryFrom').textContent = fromAccount === 'checking' ? 'CrownLedger Checking' : 'CrownLedger Savings';
+            document.getElementById('summaryTo').textContent = toAccount === 'checking' ? 'CrownLedger Checking' : 'CrownLedger Savings';
+        }
+        
+        document.getElementById('transferAmount').addEventListener('input', function() {
+            var amount = parseFloat(this.value) || 0;
+            document.getElementById('summaryAmount').textContent = '$' + amount.toFixed(2);
+            document.getElementById('summaryTotal').textContent = '$' + amount.toFixed(2);
+        });
+        
+        function handleInternalTransfer(e) {
+            e.preventDefault();
+            var amount = parseFloat(document.getElementById('transferAmount').value);
+            if (!amount || amount <= 0) {
+                showMessage('Please enter a valid amount');
+                return false;
+            }
+            if (fromAccount === toAccount) {
+                showMessage('Please select different accounts');
+                return false;
+            }
+            showMessage('Transfer of $' + amount.toFixed(2) + ' from ' + (fromAccount === 'checking' ? 'Checking' : 'Savings') + ' to ' + (toAccount === 'checking' ? 'Checking' : 'Savings') + ' completed successfully!', 'success');
+            setTimeout(function() {
+                window.location.href = 'dashboard.html';
+            }, 2000);
+            return false;
+        }
+        
+        (function() {
+            if (!isLoggedIn()) {
+                window.location.href = 'index.html';
+                return;
+            }
+            var session = getSession();
+            document.getElementById('userName').textContent = session.firstName || 'Kimberly';
+            document.getElementById('fromCheckingBalance').textContent = formatCurrency(session.checking || 11700.00);
+            document.getElementById('fromSavingsBalance').textContent = formatCurrency(session.savings || 2520.00);
+            document.getElementById('toCheckingBalance').textContent = formatCurrency(session.checking || 11700.00);
+            document.getElementById('toSavingsBalance').textContent = formatCurrency(session.savings || 2520.00);
+        })();
+    </script>
 </body>
 </html>
