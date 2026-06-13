@@ -224,30 +224,38 @@
         .account-balance .amount { font-size: 18px; font-weight: 800; color: var(--text); }
         .account-balance .label { font-size: 12px; color: var(--text-muted); }
 
-        /* Amount Input */
+        /* Professional Amount Input */
         .amount-section { margin-top: 24px; }
         .amount-section label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
-        .amount-input-wrap { position: relative; }
-        .amount-input-wrap .currency {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-muted);
-        }
-        .amount-input {
-            width: 100%;
-            padding: 14px 16px 14px 40px;
+        .amount-box {
+            background: var(--white);
             border: 2px solid var(--border);
             border-radius: var(--radius);
-            font-size: 18px;
+            padding: 0;
+            transition: border-color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .amount-box:focus-within { border-color: var(--blue); }
+        .amount-box .currency-symbol {
+            padding: 16px 0 16px 20px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-muted);
+            user-select: none;
+        }
+        .amount-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 16px 20px 16px 8px;
+            font-size: 24px;
             font-weight: 700;
             font-family: 'Inter', sans-serif;
-            transition: border-color 0.2s;
+            color: var(--text);
+            outline: none;
         }
-        .amount-input:focus { outline: none; border-color: var(--blue); }
+        .amount-box input::placeholder { color: var(--text-muted); opacity: 0.5; }
         .amount-hint {
             display: flex;
             justify-content: space-between;
@@ -262,6 +270,7 @@
             background: none;
             border: none;
             font-size: 13px;
+            font-family: 'Inter', sans-serif;
         }
 
         /* Transfer Options Grid */
@@ -569,36 +578,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Saved Recipients */
-        .saved-recipients { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-        .saved-recipient {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .saved-recipient:hover { border-color: var(--blue); background: var(--blue-light); }
-        .saved-recipient-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--blue);
-            color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-        .saved-recipient-info { flex: 1; }
-        .saved-recipient-info h4 { font-size: 14px; font-weight: 600; }
-        .saved-recipient-info p { font-size: 12px; color: var(--text-muted); }
-
         /* Responsive */
         @media (max-width: 640px) {
             .nav-links { display: none; }
@@ -701,8 +680,8 @@
                         </label>
                     </div>
 
-                    <div class="to-account-section">
-                        <label>To</label>
+                    <div class="to-account-section" style="margin-top:24px;">
+                        <label style="font-size:14px;font-weight:600;margin-bottom:12px;display:block;">To</label>
                         <div class="account-select">
                             <label class="account-option" onclick="selectToAccount('checking')">
                                 <input type="radio" name="toAccount" value="checking" id="toChecking">
@@ -726,9 +705,9 @@
 
                     <div class="amount-section">
                         <label>Amount</label>
-                        <div class="amount-input-wrap">
-                            <span class="currency">$</span>
-                            <input type="number" class="amount-input" id="internalAmount" placeholder="0.00" step="0.01" min="0.01">
+                        <div class="amount-box">
+                            <span class="currency-symbol">$</span>
+                            <input type="number" id="internalAmount" placeholder="0.00" step="0.01" min="0.01">
                         </div>
                         <div class="amount-hint">
                             <span id="internalAvailText">Select an account to see available balance</span>
@@ -802,9 +781,9 @@
 
                         <div class="amount-section">
                             <label>Amount to Send</label>
-                            <div class="amount-input-wrap">
-                                <span class="currency">$</span>
-                                <input type="number" class="amount-input" id="extAmount" placeholder="0.00" step="0.01" min="0.01">
+                            <div class="amount-box">
+                                <span class="currency-symbol">$</span>
+                                <input type="number" id="extAmount" placeholder="0.00" step="0.01" min="0.01">
                             </div>
                             <div class="amount-hint">
                                 <span id="extAvailText">Select an account to see available balance</span>
@@ -853,7 +832,6 @@
                             </div>
                         </div>
 
-                        <!-- Recipient Input -->
                         <div class="recipient-section" id="recipientSection" style="display:none;">
                             <label id="recipientLabel">Recipient Details</label>
                             <input type="text" class="recipient-input" id="recipientInput" placeholder="Enter recipient information...">
@@ -1095,7 +1073,8 @@
         function selectFromAccount(type, balance) {
             fromAccountType = type;
             fromAccountBalance = balance;
-            document.querySelectorAll('#tabContentInternal .account-option').forEach(function(el) { el.classList.remove('selected'); });
+            var options = document.querySelectorAll('#tabContentInternal .account-select:first-child .account-option');
+            options.forEach(function(el) { el.classList.remove('selected'); });
             event.currentTarget.classList.add('selected');
             document.getElementById('fromChecking').checked = (type === 'checking');
             document.getElementById('fromSavings').checked = (type === 'savings');
@@ -1103,6 +1082,7 @@
             document.getElementById('internalMaxBtn').style.display = 'inline';
             validateInternal();
         }
+
         function selectToAccount(type) {
             toAccountType = type;
             var options = document.querySelectorAll('#tabContentInternal .to-account-section .account-option');
@@ -1112,18 +1092,22 @@
             document.getElementById('toSavings').checked = (type === 'savings');
             validateInternal();
         }
+
         function setInternalMax() {
             if (fromAccountBalance > 0) {
                 document.getElementById('internalAmount').value = fromAccountBalance.toFixed(2);
                 validateInternal();
             }
         }
+
         document.getElementById('internalAmount').addEventListener('input', validateInternal);
+
         function validateInternal() {
             var amount = parseFloat(document.getElementById('internalAmount').value);
             var valid = fromAccountType && toAccountType && fromAccountType !== toAccountType && amount > 0 && amount <= fromAccountBalance;
             document.getElementById('btnInternalTransfer').disabled = !valid;
         }
+
         function processInternalTransfer() {
             var amount = parseFloat(document.getElementById('internalAmount').value);
             var state = JSON.parse(localStorage.getItem('crownledger_state') || '{}');
@@ -1158,6 +1142,7 @@
             document.getElementById('intRcptDate').textContent = tx.date;
             document.getElementById('intRcptNewBal').textContent = '$' + (fromAccountType === 'checking' ? state.checking : state.savings).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
+
         function resetInternal() {
             document.getElementById('internalSuccess').classList.remove('active');
             document.getElementById('internalSuccess').classList.add('hidden');
@@ -1180,7 +1165,8 @@
         function selectExtAccount(type, balance) {
             extAccountType = type;
             extAccountBalance = balance;
-            document.querySelectorAll('#extStep1 .account-select .account-option').forEach(function(el) { el.classList.remove('selected'); });
+            var options = document.querySelectorAll('#extStep1 .account-select .account-option');
+            options.forEach(function(el) { el.classList.remove('selected'); });
             event.currentTarget.classList.add('selected');
             document.getElementById('extChecking').checked = (type === 'checking');
             document.getElementById('extSavings').checked = (type === 'savings');
@@ -1188,12 +1174,14 @@
             document.getElementById('extMaxBtn').style.display = 'inline';
             validateExtStep1();
         }
+
         function setExtMax() {
             if (extAccountBalance > 0) {
                 document.getElementById('extAmount').value = extAccountBalance.toFixed(2);
                 validateExtStep1();
             }
         }
+
         document.getElementById('extAmount').addEventListener('input', validateExtStep1);
 
         function selectTransferOption(option) {
@@ -1231,7 +1219,8 @@
 
         function validateExtStep1() {
             var amount = parseFloat(document.getElementById('extAmount').value);
-            var valid = extAccountType && transferOption && amount > 0 && amount <= extAccountBalance && extRecipient && extRecipient.length > 0;
+            var hasRecipient = extRecipient && extRecipient.length > 0;
+            var valid = extAccountType && transferOption && amount > 0 && amount <= extAccountBalance && hasRecipient;
             document.getElementById('btnExtStep1').disabled = !valid;
             if (valid) extAmount = amount;
         }
