@@ -1,292 +1,190 @@
-/* ============================================
-   CROWNLEDGER BANK — SHARED JAVASCRIPT
-   ============================================ */
+// CrownLedger Bank - Shared JavaScript
+// Account: Kimberly Westbrook
+// Login: Kimberlywestbrooklmi / WestKim19$
 
-// ===== AUTH STATE =====
-const AUTH_KEY = 'crownledger_auth';
-const STATE_KEY = 'crownledger_state';
-const TX_KEY = 'crownledger_transactions';
-const LAST_TX_KEY = 'crownledger_last_tx';
+(function() {
+    'use strict';
 
-const DEFAULT_STATE = {
-  checking: 11700.00,
-  savings: 2520.00,
-  user: {
-    firstName: 'Kimberly',
-    lastName: 'Westbrook',
-    email: 'kimberly.westbrook@email.com',
-    phone: '(555) 123-4567',
-    username: 'Kimberlywestbrooklmi',
-    memberSince: 'March 2019'
-  },
-  activated: false
-};
+    // Session Management
+    window.getSession = function() {
+        try {
+            var session = localStorage.getItem('crownledger_session');
+            return session ? JSON.parse(session) : null;
+        } catch(e) {
+            return null;
+        }
+    };
 
-const DEFAULT_TRANSACTIONS = [
-  {
-    id: 'TXN-20260608-001',
-    name: 'Liberty Mutual Insurance',
-    desc: 'Direct Deposit',
-    amount: 10402.00,
-    type: 'deposit',
-    date: '2026-06-08',
-    status: 'completed',
-    account: 'checking'
-  },
-  {
-    id: 'TXN-20260610-002',
-    name: 'Liberty Mutual Insurance',
-    desc: 'Bonus Payment',
-    amount: 318.00,
-    type: 'deposit',
-    date: '2026-06-10',
-    status: 'completed',
-    account: 'checking'
-  },
-  {
-    id: 'TXN-20260611-003',
-    name: 'Liberty Mutual Insurance',
-    desc: 'Performance Bonus',
-    amount: 208.00,
-    type: 'deposit',
-    date: '2026-06-11',
-    status: 'completed',
-    account: 'checking'
-  },
-  {
-    id: 'TXN-20260605-004',
-    name: 'Whole Foods Market',
-    desc: 'Grocery Purchase',
-    amount: -127.43,
-    type: 'payment',
-    date: '2026-06-05',
-    status: 'completed',
-    account: 'checking'
-  },
-  {
-    id: 'TXN-20260604-005',
-    name: 'Shell Oil',
-    desc: 'Gas Station',
-    amount: -45.00,
-    type: 'payment',
-    date: '2026-06-04',
-    status: 'completed',
-    account: 'checking'
-  },
-  {
-    id: 'TXN-20260603-006',
-    name: 'Netflix',
-    desc: 'Monthly Subscription',
-    amount: -15.99,
-    type: 'payment',
-    date: '2026-06-03',
-    status: 'completed',
-    account: 'checking'
-  },
-  {
-    id: 'TXN-20260601-007',
-    name: 'Transfer to Savings',
-    desc: 'Automatic Transfer',
-    amount: -500.00,
-    type: 'transfer',
-    date: '2026-06-01',
-    status: 'completed',
-    account: 'checking'
-  },
-  {
-    id: 'TXN-20260601-008',
-    name: 'Transfer from Checking',
-    desc: 'Automatic Transfer',
-    amount: 500.00,
-    type: 'transfer',
-    date: '2026-06-01',
-    status: 'completed',
-    account: 'savings'
-  }
-];
+    window.isLoggedIn = function() {
+        var session = window.getSession();
+        if (!session) return false;
+        var hoursSinceLogin = (new Date() - new Date(session.loginTime)) / (1000 * 60 * 60);
+        return hoursSinceLogin < 24;
+    };
 
-// ===== STORAGE HELPERS =====
-function getState() {
-  try {
-    var stored = localStorage.getItem(STATE_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch (e) {}
-  return JSON.parse(JSON.stringify(DEFAULT_STATE));
-}
+    window.logout = function() {
+        localStorage.removeItem('crownledger_session');
+        window.location.href = 'index.html';
+    };
 
-function saveState(state) {
-  try {
-    localStorage.setItem(STATE_KEY, JSON.stringify(state));
-  } catch (e) {}
-}
+    window.handleLogout = function() {
+        window.logout();
+    };
 
-function getTransactions() {
-  try {
-    var stored = localStorage.getItem(TX_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch (e) {}
-  return JSON.parse(JSON.stringify(DEFAULT_TRANSACTIONS));
-}
+    // Auth Guard - redirect to login if not authenticated
+    window.requireAuth = function() {
+        if (!window.isLoggedIn()) {
+            window.location.href = 'index.html';
+            return false;
+        }
+        return true;
+    };
 
-function saveTransactions(txs) {
-  try {
-    localStorage.setItem(TX_KEY, JSON.stringify(txs));
-  } catch (e) {}
-}
+    // Initialize user display
+    window.initUserDisplay = function() {
+        var session = window.getSession();
+        if (session) {
+            var userNameEl = document.getElementById('userName');
+            var userNameFullEl = document.getElementById('userNameFull');
+            if (userNameEl) userNameEl.textContent = session.firstName || 'Kimberly';
+            if (userNameFullEl) userNameFullEl.textContent = session.name || 'Kimberly Westbrook';
+        }
+    };
 
-function isLoggedIn() {
-  try {
-    return localStorage.getItem(AUTH_KEY) === 'true';
-  } catch (e) {
-    return false;
-  }
-}
+    // Format currency
+    window.formatCurrency = function(amount) {
+        return '$' + parseFloat(amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    };
 
-function login() {
-  try {
-    localStorage.setItem(AUTH_KEY, 'true');
-  } catch (e) {}
-}
+    // Format date
+    window.formatDate = function(dateStr) {
+        var date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
 
-function logout() {
-  try {
-    localStorage.removeItem(AUTH_KEY);
-    localStorage.removeItem(STATE_KEY);
-    localStorage.removeItem(TX_KEY);
-    localStorage.removeItem(LAST_TX_KEY);
-  } catch (e) {}
-}
+    // Copy to clipboard
+    window.copyToClipboard = function(text) {
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            window.showToast && window.showToast('Copied to clipboard!', 'success');
+        } catch(e) {
+            window.showToast && window.showToast('Failed to copy', 'error');
+        }
+        document.body.removeChild(textarea);
+    };
 
-function getLastTx() {
-  try {
-    var stored = localStorage.getItem(LAST_TX_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch (e) {}
-  return null;
-}
+    // Toast notification
+    window.showToast = function(message, type) {
+        var existing = document.querySelector('.toast-notification');
+        if (existing) existing.remove();
 
-function saveLastTx(tx) {
-  try {
-    localStorage.setItem(LAST_TX_KEY, JSON.stringify(tx));
-  } catch (e) {}
-}
+        var toast = document.createElement('div');
+        toast.className = 'toast-notification toast-' + (type || 'info');
+        toast.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle') + '"></i> ' + message;
+        
+        toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:' + (type === 'success' ? '#107c10' : type === 'error' ? '#d13438' : '#0066b2') + ';color:white;padding:14px 24px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;animation:toastSlide 0.3s ease;';
+        
+        var style = document.createElement('style');
+        style.textContent = '@keyframes toastSlide{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}';
+        document.head.appendChild(style);
+        
+        document.body.appendChild(toast);
+        setTimeout(function() {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(20px)';
+            toast.style.transition = 'all 0.3s ease';
+            setTimeout(function() { toast.remove(); }, 300);
+        }, 3000);
+    };
 
-// ===== FORMATTERS =====
-function formatCurrency(amount) {
-  return '$' + parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
+    // File upload handler
+    window.handleFileUpload = function(input) {
+        var file = input.files[0];
+        if (!file) return;
+        
+        var preview = document.getElementById('filePreview');
+        var fileName = document.getElementById('fileName');
+        var confirmBtn = document.getElementById('confirmBtn');
+        
+        if (file.size > 10 * 1024 * 1024) {
+            window.showToast('File too large. Max 10MB.', 'error');
+            input.value = '';
+            return;
+        }
+        
+        if (preview) {
+            preview.style.display = 'flex';
+            fileName.textContent = file.name;
+        }
+        if (confirmBtn) confirmBtn.disabled = false;
+        
+        // Store file reference
+        localStorage.setItem('crownledger_pending_file', file.name);
+    };
 
-function formatDate(dateStr) {
-  var d = new Date(dateStr);
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
+    window.removeFile = function() {
+        var input = document.getElementById('paymentProof');
+        var preview = document.getElementById('filePreview');
+        var confirmBtn = document.getElementById('confirmBtn');
+        
+        if (input) input.value = '';
+        if (preview) preview.style.display = 'none';
+        if (confirmBtn) confirmBtn.disabled = true;
+        localStorage.removeItem('crownledger_pending_file');
+    };
 
-function generateTxId() {
-  var date = new Date();
-  var dateStr = date.getFullYear() + 
-    String(date.getMonth() + 1).padStart(2, '0') + 
-    String(date.getDate()).padStart(2, '0');
-  var random = Math.floor(Math.random() * 9000) + 1000;
-  return 'TXN-' + dateStr + '-' + random;
-}
+    // Confirm payment
+    window.confirmPayment = function() {
+        var file = localStorage.getItem('crownledger_pending_file');
+        if (!file) {
+            window.showToast('Please upload payment proof first', 'error');
+            return;
+        }
+        
+        window.showToast('Payment verification submitted. Processing...', 'success');
+        setTimeout(function() {
+            window.location.href = 'dashboard.html';
+        }, 2000);
+    };
 
-// ===== TOAST =====
-function showToast(message, type) {
-  type = type || 'success';
-  var existing = document.querySelector('.toast');
-  if (existing) existing.remove();
-  
-  var toast = document.createElement('div');
-  toast.className = 'toast ' + type;
-  
-  var icon = type === 'success' ? 'check-circle' : 
-             type === 'error' ? 'exclamation-circle' : 'info-circle';
-  
-  toast.innerHTML = '<i class="fas fa-' + icon + '"></i><span>' + message + '</span>';
-  document.body.appendChild(toast);
-  
-  setTimeout(function() {
-    toast.classList.add('show');
-  }, 10);
-  
-  setTimeout(function() {
-    toast.classList.remove('show');
-    setTimeout(function() {
-      toast.remove();
-    }, 400);
-  }, 3000);
-}
+    // Chime payment init
+    window.initChimePayment = function() {
+        window.initUserDisplay();
+    };
 
-// ===== COPY TO CLIPBOARD =====
-function copyToClipboard(text, btn) {
-  var textarea = document.createElement('textarea');
-  textarea.value = text;
-  textarea.style.position = 'fixed';
-  textarea.style.left = '-9999px';
-  document.body.appendChild(textarea);
-  textarea.select();
-  
-  try {
-    document.execCommand('copy');
-    showToast('Copied to clipboard!', 'success');
-    if (btn) {
-      var original = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-check"></i> Copied';
-      setTimeout(function() {
-        btn.innerHTML = original;
-      }, 2000);
-    }
-  } catch (e) {
-    showToast('Failed to copy', 'error');
-  }
-  
-  document.body.removeChild(textarea);
-}
+    // Transaction storage
+    window.saveTransaction = function(tx) {
+        var txs = JSON.parse(localStorage.getItem('crownledger_transactions') || '[]');
+        txs.unshift(tx);
+        localStorage.setItem('crownledger_transactions', JSON.stringify(txs));
+    };
 
-// ===== LOGOUT HANDLER =====
-function handleLogout() {
-  logout();
-  window.location.href = 'index.html';
-}
+    window.getTransactions = function() {
+        return JSON.parse(localStorage.getItem('crownledger_transactions') || '[]');
+    };
 
-// ===== MOBILE MENU =====
-function toggleMobileMenu() {
-  var nav = document.getElementById('mobileNav');
-  if (nav) {
-    nav.classList.toggle('open');
-  }
-}
-
-function closeMobileMenu() {
-  var nav = document.getElementById('mobileNav');
-  if (nav) {
-    nav.classList.remove('open');
-  }
-}
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded', function() {
-  // Add logout listeners
-  var logoutBtns = document.querySelectorAll('[data-logout]');
-  for (var i = 0; i < logoutBtns.length; i++) {
-    logoutBtns[i].addEventListener('click', handleLogout);
-  }
-  
-  // Add mobile menu listeners
-  var menuBtn = document.getElementById('mobileMenuBtn');
-  if (menuBtn) {
-    menuBtn.addEventListener('click', toggleMobileMenu);
-  }
-  
-  var closeBtn = document.getElementById('mobileNavClose');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeMobileMenu);
-  }
-  
-  var mobileOverlay = document.getElementById('mobileNav');
-  if (mobileOverlay) {
-    mobileOverlay.addEventListener('click', function(e) {
-      if (e.target === mobileOverlay) closeMobileMenu();
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Only run auth check on protected pages
+        var protectedPages = ['dashboard', 'checking', 'savings', 'transfer', 'bill-pay', 'transactions', 'profile', 'zelle', 'help', 'settings', 'payment-options', 'chime-payment', 'activation'];
+        var currentPage = window.location.pathname.split('/').pop().replace('.html', '') || 'index';
+        
+        if (protectedPages.indexOf(currentPage) !== -1 && !window.isLoggedIn()) {
+            window.location.href = 'index.html';
+            return;
+        }
+        
+        window.initUserDisplay();
     });
-  }
-});
+
+})();
