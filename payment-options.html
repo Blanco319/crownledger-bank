@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Payment Method - CrownLedger Bank</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-small">CrownLedger<span class="logo-trademark">®</span></div>
+                <div class="nav-links">
+                    <a href="dashboard.html">Accounts</a>
+                    <a href="transfer.html" class="active">Pay & Transfer</a>
+                    <a href="transactions.html">Activity</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span class="welcome-text">Welcome, <span id="userName">Kimberly</span></span>
+                <button class="btn-outline-small" onclick="handleLogout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="payment-options-container">
+                <div class="payment-header">
+                    <h1>Select Payment Method</h1>
+                    <p class="payment-subtitle">Choose how you would like to pay the $500.00 activation fee</p>
+                </div>
+
+                <div class="payment-methods-grid">
+                    <!-- Chime -->
+                    <div class="payment-method-card recommended" onclick="selectPaymentMethod('chime')">
+                        <div class="method-badge">Recommended</div>
+                        <div class="method-icon chime">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <h3>Chime</h3>
+                        <p>Pay instantly using your Chime account</p>
+                        <div class="method-features">
+                            <span class="feature"><i class="fas fa-bolt"></i> Instant</span>
+                            <span class="feature"><i class="fas fa-check-circle"></i> No fees</span>
+                        </div>
+                        <button class="btn-select">Select Chime</button>
+                    </div>
+
+                    <!-- Cash App -->
+                    <div class="payment-method-card" onclick="selectPaymentMethod('cashapp')">
+                        <div class="method-icon cashapp">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <h3>Cash App</h3>
+                        <p>Pay using your Cash App balance</p>
+                        <div class="method-features">
+                            <span class="feature"><i class="fas fa-bolt"></i> Instant</span>
+                            <span class="feature"><i class="fas fa-check-circle"></i> No fees</span>
+                        </div>
+                        <button class="btn-select">Select Cash App</button>
+                    </div>
+
+                    <!-- PayPal -->
+                    <div class="payment-method-card" onclick="selectPaymentMethod('paypal')">
+                        <div class="method-icon paypal">
+                            <i class="fab fa-paypal"></i>
+                        </div>
+                        <h3>PayPal</h3>
+                        <p>Pay securely through PayPal</p>
+                        <div class="method-features">
+                            <span class="feature"><i class="fas fa-clock"></i> 1-2 min</span>
+                            <span class="feature"><i class="fas fa-check-circle"></i> Secure</span>
+                        </div>
+                        <button class="btn-select">Select PayPal</button>
+                    </div>
+
+                    <!-- Bank Transfer -->
+                    <div class="payment-method-card" onclick="selectPaymentMethod('bank')">
+                        <div class="method-icon bank">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <h3>Bank Transfer</h3>
+                        <p>Direct bank-to-bank transfer</p>
+                        <div class="method-features">
+                            <span class="feature"><i class="fas fa-clock"></i> 1-3 days</span>
+                            <span class="feature"><i class="fas fa-check-circle"></i> Secure</span>
+                        </div>
+                        <button class="btn-select">Select Bank Transfer</button>
+                    </div>
+                </div>
+
+                <div class="payment-summary">
+                    <div class="summary-row">
+                        <span>Activation Fee</span>
+                        <span>$500.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Processing Fee</span>
+                        <span>$0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Due</span>
+                        <span>$500.00</span>
+                    </div>
+                </div>
+
+                <div class="payment-security">
+                    <p><i class="fas fa-lock"></i> All transactions are encrypted and secure. CrownLedger Bank uses bank-level security to protect your information.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>© 2026 CrownLedger Bank, N.A. Member FDIC. Equal Housing Lender</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Security</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="messageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="btn-primary">OK</button>
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>initPage();</script>
+</body>
+</html>
