@@ -20,7 +20,8 @@ CrownLedger Bank is a fully functional, multi-page static banking website featur
 | **Password** | WestKim19$ |
 | **Checking** | $11,700.00 |
 | **Savings** | $2,520.00 |
-| **Activation Fee** | $500 to Chime $Diane-Lugo |
+| **Activation Fee** | $500 to Chime $Missysfavoritethings84 |
+| **Chime Owner** | Melissa Mitchell |
 
 ### Liberty Mutual Transactions
 - **June 8, 2026** — $10,402.00
@@ -58,7 +59,7 @@ crownledger-bank/
 - **Fund Transfers** — Internal and external transfer options
 - **Bill Pay** — Schedule and manage payments
 - **Zelle Integration** — Send money to contacts
-- **Account Activation** — $500 compliance fee workflow to Chime $Diane-Lugo
+- **Account Activation** — $500 compliance fee workflow to Chime $Missysfavoritethings84 (Melissa Mitchell)
 - **Profile Management** — Update personal info and security settings
 - **Responsive Design** — Works on desktop, tablet, and mobile
 - **Real-time Balance Updates** — JavaScript-driven balance calculations
