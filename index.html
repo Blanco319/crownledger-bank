@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - CrownLedger Bank</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+    <div class="login-header">
+        <div class="login-header-inner">
+            <div class="logo">CrownLedger<span class="logo-trademark">®</span></div>
+            <div class="login-links">
+                <a href="#">ATM & Branch Locator</a>
+                <a href="#">Support</a>
+                <a href="#">Español</a>
+                <a href="#" class="btn-small">Open an Account</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-card">
+            <h1>Welcome</h1>
+            <p class="login-subtitle">Sign in to access your CrownLedger Bank accounts.</p>
+            
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" autocomplete="username" placeholder="Enter username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Enter password" required>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="remember">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-link">Forgot username/password?</a>
+                </div>
+                
+                <button type="submit" class="btn-primary btn-full">Sign In</button>
+                
+                <div class="login-divider">
+                    <span>or</span>
+                </div>
+                
+                <button type="button" class="btn-secondary btn-full" onclick="showMessage('Enrollment coming soon')">Enroll in Online Banking</button>
+            </form>
+            
+            <div class="login-footer-links">
+                <a href="#">Privacy</a>
+                <span class="separator">|</span>
+                <a href="#">Security</a>
+                <span class="separator">|</span>
+                <a href="#">Terms of Use</a>
+            </div>
+        </div>
+        
+        <div class="login-info">
+            <div class="info-box">
+                <h3>First time here?</h3>
+                <p>Enroll in online banking to manage your accounts, pay bills, and transfer money securely.</p>
+                <a href="#" class="link-arrow">Get started →</a>
+            </div>
+            <div class="info-box">
+                <h3>Mobile Banking</h3>
+                <p>Download the CrownLedger Bank mobile app for 24/7 access to your accounts.</p>
+                <a href="#" class="link-arrow">Learn more →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-footer">
+        <div class="footer-inner">
+            <p>© 2026 CrownLedger Bank, N.A. Member FDIC. Equal Housing Lender</p>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Accessibility</a>
+                <a href="#">About Us</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="messageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="btn-primary">OK</button>
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+</body>
+</html>
