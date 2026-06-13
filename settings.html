@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - CrownLedger Bank</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-small">CrownLedger<span class="logo-trademark">®</span></div>
+                <div class="nav-links">
+                    <a href="dashboard.html">Accounts</a>
+                    <a href="transfer.html">Pay & Transfer</a>
+                    <a href="transactions.html">Activity</a>
+                    <a href="settings.html" class="active">Settings</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span class="welcome-text">Welcome, <span id="userName">Kimberly</span></span>
+                <button class="btn-outline-small" onclick="handleLogout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Account Settings</h1>
+                <p class="page-subtitle">Manage your profile, security, and preferences</p>
+            </div>
+
+            <div class="settings-grid">
+                <!-- Profile Card -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>Profile Information</h3>
+                    </div>
+                    <div class="settings-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" value="Kimberly" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" value="Westbrook" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" value="kimberly.westbrook@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" value="(555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" value="123 Main Street, Apt 4B">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" value="New York">
+                            </div>
+                            <div class="form-group">
+                                <label>State</label>
+                                <input type="text" value="NY">
+                            </div>
+                            <div class="form-group">
+                                <label>ZIP</label>
+                                <input type="text" value="10001">
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="showMessage('Profile updated successfully')">Save Changes</button>
+                    </div>
+                </div>
+
+                <!-- Security Card -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Security</h3>
+                    </div>
+                    <div class="security-options">
+                        <div class="security-item">
+                            <div class="security-info">
+                                <strong>Change Password</strong>
+                                <p>Last changed 45 days ago</p>
+                            </div>
+                            <button class="btn-outline-small" onclick="showMessage('Password change feature coming soon')">Change</button>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-info">
+                                <strong>Two-Factor Authentication</strong>
+                                <p>Currently enabled via SMS</p>
+                            </div>
+                            <button class="btn-outline-small" onclick="showMessage('2FA settings coming soon')">Manage</button>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-info">
+                                <strong>Security Questions</strong>
+                                <p>3 questions set</p>
+                            </div>
+                            <button class="btn-outline-small" onclick="showMessage('Security questions coming soon')">Update</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Details -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fas fa-university"></i>
+                        <h3>Account Details</h3>
+                    </div>
+                    <div class="account-details-list">
+                        <div class="detail-item">
+                            <span class="detail-label">Account Number</span>
+                            <span class="detail-value">**** **** **** 8291</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Routing Number</span>
+                            <span class="detail-value">021000021</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Account Type</span>
+                            <span class="detail-value">Total Checking</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Account Status</span>
+                            <span class="detail-value status-active">Active</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Opened</span>
+                            <span class="detail-value">March 15, 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fas fa-bell"></i>
+                        <h3>Notifications</h3>
+                    </div>
+                    <div class="notification-options">
+                        <label class="toggle-item">
+                            <span>Email alerts for transactions</span>
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <label class="toggle-item">
+                            <span>SMS alerts for large transactions</span>
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <label class="toggle-item">
+                            <span>Monthly statements via email</span>
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <label class="toggle-item">
+                            <span>Marketing emails</span>
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>© 2026 CrownLedger Bank, N.A. Member FDIC. Equal Housing Lender</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Security</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="messageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="btn-primary">OK</button>
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>initPage();</script>
+</body>
+</html>
