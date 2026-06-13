@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts - CrownLedger Bank</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-small">CrownLedger<span class="logo-trademark">®</span></div>
+                <div class="nav-links">
+                    <a href="dashboard.html" class="active">Accounts</a>
+                    <a href="transfer.html">Pay & Transfer</a>
+                    <a href="transactions.html">Activity</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span class="welcome-text">Welcome, <span id="userName">Kimberly</span></span>
+                <button class="btn-outline-small" onclick="handleLogout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Accounts</h1>
+                <p class="last-login">Last sign in: <span id="lastLogin">June 12, 2026 at 9:45 PM ET</span></p>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Account Cards -->
+                <div class="accounts-section">
+                    <div class="account-card" onclick="window.location.href='transactions.html'">
+                        <div class="account-header">
+                            <div class="account-icon checking">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="account-title">
+                                <h3>CrownLedger Total Checking®</h3>
+                                <p class="account-number">...8291</p>
+                            </div>
+                        </div>
+                        <div class="account-balance">
+                            <span class="balance-label">Available balance</span>
+                            <span class="balance-amount" id="checkingBalance">$11,700.00</span>
+                        </div>
+                        <div class="account-actions">
+                            <a href="transfer.html" class="action-link">Send money</a>
+                            <a href="transactions.html" class="action-link">View activity</a>
+                        </div>
+                    </div>
+
+                    <div class="account-card" onclick="window.location.href='transactions.html'">
+                        <div class="account-header">
+                            <div class="account-icon savings">
+                                <i class="fas fa-piggy-bank"></i>
+                            </div>
+                            <div class="account-title">
+                                <h3>CrownLedger Savings℠</h3>
+                                <p class="account-number">...4452</p>
+                            </div>
+                        </div>
+                        <div class="account-balance">
+                            <span class="balance-label">Available balance</span>
+                            <span class="balance-amount" id="savingsBalance">$2,520.00</span>
+                        </div>
+                        <div class="account-actions">
+                            <a href="transfer.html" class="action-link">Transfer</a>
+                            <a href="transactions.html" class="action-link">View activity</a>
+                        </div>
+                    </div>
+
+                    <div class="total-balance-card">
+                        <div class="total-label">Total CrownLedger Balance</div>
+                        <div class="total-amount" id="totalBalance">$14,220.00</div>
+                        <div class="total-accounts">Across 2 accounts</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-section">
+                    <h2>Quick Actions</h2>
+                    <div class="quick-actions-grid">
+                        <a href="transfer.html" class="quick-action">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Send Money</span>
+                        </a>
+                        <a href="transfer.html" class="quick-action">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transfer</span>
+                        </a>
+                        <a href="#" class="quick-action" onclick="showMessage('Feature available in mobile app')">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Deposit Check</span>
+                        </a>
+                        <a href="#" class="quick-action" onclick="showMessage('Coming soon')">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>Pay Bills</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity-section">
+                    <div class="section-header">
+                        <h2>Recent Activity</h2>
+                        <a href="transactions.html" class="view-all">View all</a>
+                    </div>
+                    <div class="transaction-list" id="recentTransactions">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>© 2026 CrownLedger Bank, N.A. Member FDIC. Equal Housing Lender</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Security</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="messageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="btn-primary">OK</button>
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>initDashboard();</script>
+</body>
+</html>
