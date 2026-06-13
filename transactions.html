@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity - CrownLedger Bank</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-small">CrownLedger<span class="logo-trademark">®</span></div>
+                <div class="nav-links">
+                    <a href="dashboard.html">Accounts</a>
+                    <a href="transfer.html">Pay & Transfer</a>
+                    <a href="transactions.html" class="active">Activity</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span class="welcome-text">Welcome, <span id="userName">Kimberly</span></span>
+                <button class="btn-outline-small" onclick="handleLogout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Account Activity</h1>
+                <p class="page-subtitle">View all transactions across your accounts</p>
+            </div>
+
+            <div class="transactions-container">
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label>Account:</label>
+                        <select id="accountFilter" onchange="filterTransactions()">
+                            <option value="all">All Accounts</option>
+                            <option value="checking">CrownLedger Total Checking (...8291)</option>
+                            <option value="savings">CrownLedger Savings (...4452)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Time period:</label>
+                        <select id="periodFilter" onchange="filterTransactions()">
+                            <option value="30">Last 30 days</option>
+                            <option value="60">Last 60 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="all">All time</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Search:</label>
+                        <input type="text" id="searchFilter" placeholder="Search transactions..." onkeyup="filterTransactions()">
+                    </div>
+                </div>
+
+                <!-- Transaction Table -->
+                <div class="transaction-table-container">
+                    <table class="transaction-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Account</th>
+                                <th class="text-right">Amount</th>
+                                <th class="text-right">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Summary -->
+                <div class="transaction-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Total Deposits</span>
+                        <span class="summary-value positive" id="totalDeposits">+$10,928.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Withdrawals</span>
+                        <span class="summary-value negative" id="totalWithdrawals">-$0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Net Change</span>
+                        <span class="summary-value positive" id="netChange">+$10,928.00</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>© 2026 CrownLedger Bank, N.A. Member FDIC. Equal Housing Lender</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Security</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="messageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="btn-primary">OK</button>
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>initTransactions();</script>
+</body>
+</html>
