@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay & Transfer - CrownLedger Bank</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-small">CrownLedger<span class="logo-trademark">®</span></div>
+                <div class="nav-links">
+                    <a href="dashboard.html">Accounts</a>
+                    <a href="transfer.html" class="active">Pay & Transfer</a>
+                    <a href="transactions.html">Activity</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span class="welcome-text">Welcome, <span id="userName">Kimberly</span></span>
+                <button class="btn-outline-small" onclick="handleLogout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Pay & Transfer</h1>
+                <p class="page-subtitle">Send money, make transfers, and manage payments</p>
+            </div>
+
+            <div class="transfer-grid">
+                <!-- Send Money Card -->
+                <div class="transfer-card" onclick="checkActivation()">
+                    <div class="transfer-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <h3>Send Money</h3>
+                    <p>Send money to friends, family, or businesses quickly and securely.</p>
+                    <span class="transfer-arrow"><i class="fas fa-chevron-right"></i></span>
+                </div>
+
+                <!-- Withdraw Card -->
+                <div class="transfer-card" onclick="checkActivation()">
+                    <div class="transfer-icon withdraw">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3>Withdraw Funds</h3>
+                    <p>Withdraw money to your external accounts or digital wallets.</p>
+                    <span class="transfer-arrow"><i class="fas fa-chevron-right"></i></span>
+                </div>
+
+                <!-- Transfer Between Accounts -->
+                <div class="transfer-card" onclick="showMessage('Internal transfers available soon')">
+                    <div class="transfer-icon internal">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>Between Accounts</h3>
+                    <p>Move money between your CrownLedger accounts instantly.</p>
+                    <span class="transfer-arrow"><i class="fas fa-chevron-right"></i></span>
+                </div>
+
+                <!-- Wire Transfer -->
+                <div class="transfer-card" onclick="checkActivation()">
+                    <div class="transfer-icon wire">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Wire Transfer</h3>
+                    <p>Send domestic or international wire transfers.</p>
+                    <span class="transfer-arrow"><i class="fas fa-chevron-right"></i></span>
+                </div>
+            </div>
+
+            <!-- Account Status Banner -->
+            <div class="status-banner" id="statusBanner">
+                <i class="fas fa-info-circle"></i>
+                <div class="status-content">
+                    <strong>Account Activation Required</strong>
+                    <p>Your account requires a one-time activation fee of $500.00 before you can send money or make withdrawals. <a href="activation-fee.html">Activate now</a></p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>© 2026 CrownLedger Bank, N.A. Member FDIC. Equal Housing Lender</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Security</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="messageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="btn-primary">OK</button>
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>initTransfer();</script>
+</body>
+</html>
